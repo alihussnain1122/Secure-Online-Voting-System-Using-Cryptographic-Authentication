@@ -16,7 +16,7 @@ const EditAdmin = () => {
       try {
         const { data } = await axios.get(`/api/admins/${id}`);
         setUsername(data.username);
-        setCity(data.city || ''); // Set city if available
+        setCity(data.city || '');
       } catch (error) {
         console.error(error);
         setError('Failed to load admin data');
@@ -41,7 +41,11 @@ const EditAdmin = () => {
       }, 1500);
     } catch (error) {
       console.error(error);
-      setError('Error updating admin');
+      if (error.response && error.response.data && error.response.data.message) {
+        setError(error.response.data.message);
+      } else {
+        setError('Error updating admin');
+      }
     }
   };
 
@@ -97,7 +101,7 @@ const EditAdmin = () => {
           />
         </div>
 
-        {/* City Input */}
+        {/* City Field */}
         <div>
           <label className="block text-md font-medium text-blue-900 mb-1">
             City
@@ -112,9 +116,13 @@ const EditAdmin = () => {
           />
         </div>
 
-        {/* Messages */}
-        {message && <p className="text-green-700 text-sm text-center">{message}</p>}
-        {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+        {/* Feedback Messages */}
+        {message && (
+          <p className="text-green-700 text-sm text-center">{message}</p>
+        )}
+        {error && (
+          <p className="text-red-600 text-sm text-center">{error}</p>
+        )}
 
         {/* Submit Button */}
         <button

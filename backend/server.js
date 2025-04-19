@@ -10,7 +10,7 @@ const { protect } = require('./middleware/authMiddleware');
 const Feedback = require('./models/Feedback');
 const adminRoutes = require('./routes/admin');
 const Admin = require('./models/Admin');  // Assuming you have an Admin model
-const commissionRoutes = require('./routes/commission');
+
 // Load environment variables
 dotenv.config();
 
@@ -40,7 +40,7 @@ mongoose
 app.use('/api', adminRoutes);
 app.post('/api/admin/login', loginAdmin);
 app.post('/api/voter/login', loginVoter);
-app.use('/api/commission', commissionRoutes);
+
 // Dashboard (Protected)
 app.get('/api/commission/dashboard', protect, (req, res) => {
   res.json({

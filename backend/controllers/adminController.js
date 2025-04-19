@@ -2,16 +2,28 @@ const Admin = require('../models/Admin');  // Ensure you have an Admin model def
 
 // Create a new admin
 exports.createAdmin = async (req, res) => {
+  const { username, password, city } = req.body;
+
+  // Validate the input data
+  if (!username || !password || !city) {
+    return res.status(400).json({ message: 'All fields are required.' });
+  }
+
   try {
-    const { name, email, password } = req.body;
-    const admin = new Admin({ name, email, password });
-    await admin.save();
-    res.status(201).json(admin);  // Respond with the newly created admin
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Error creating admin' });
+    const newAdmin = new Admin({
+      username,
+      password,
+      city,
+    });
+
+    await newAdmin.save();
+    res.status(201).json({ message: 'Admin created successfully.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error.' });
   }
 };
+
 
 // Get all admins (for example purposes)
 exports.getAllAdmins = async (req, res) => {
